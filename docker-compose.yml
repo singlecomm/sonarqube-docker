@@ -1,0 +1,29 @@
+version: "3.3"
+
+services:
+  sonarqube:
+    image: sonarqube:6.7.2
+    depends_on:
+      - db
+    ports:
+      - "9000:9000"
+    networks:
+      - sonarnet
+    environment:
+      - SONARQUBE_JDBC_USERNAME=sonar
+      - SONARQUBE_JDBC_PASSWORD=sonar
+      - SONARQUBE_JDBC_URL=jdbc:mysql://db:3306/sonar?useUnicode=true&characterEncoding=utf8
+
+  db:
+    image: mysql:5.7
+    networks:
+      - sonarnet
+    environment:
+      - MYSQL_ROOT_PASSWORD=sonar
+      - MYSQL_DATABASE=sonar
+      - MYSQL_USER=sonar
+      - MYSQL_PASSWORD=sonar
+
+networks:
+  sonarnet:
+    driver: bridge
